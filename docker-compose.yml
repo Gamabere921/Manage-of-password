@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./password-manager-frontend
+    ports:
+      - '5173:5173'
+    networks:
+      app-network:
+        ipv4_address: 172.28.0.2
+
+  backend:
+    build:
+      context: ./password-manager-backend
+    ports:
+      - '5000:5000'
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/password_manager
+    networks:
+      app-network:
+        ipv4_address: 172.28.0.3
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: password_manager
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      app-network:
+        ipv4_address: 172.28.0.4
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      app-network:
+        ipv4_address: 172.28.0.5
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
