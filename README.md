@@ -26,7 +26,7 @@ Este gestor de contraseñas es de facil instalacion y cuenta con:
 
 ## Tutorial de uso:
 
-1. Clonar repositorio con `git clone [https://github.com/Gamabere921/Manage-of-password.git](https://github.com/Gamabere921/Manage-of-password.git)`
+1. Clonar repositorio con `git clone [https://github.com/Gamabere921/Manage-of-password.git]
 2. Entrar a la carpeta del repositorio
 3. Ejecutar el comando `docker-compose up -d —build` 
 4. Verificar que se levantaron los cuatro contenedores con el comando  `docker ps`
